@@ -176,7 +176,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.class_for_admission}
                   </p>
                   {/* <hr /> */}
@@ -198,7 +201,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.firstname + " " + details.lastname}
                   </p>
                   {/* <hr /> */}
@@ -240,7 +246,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.dob_in_words}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.dob_in_words}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -261,7 +272,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{currentAge}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {currentAge}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -281,7 +297,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.gender}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.gender}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -301,7 +322,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.Religion}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.Religion}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -321,7 +347,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.caste}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.caste}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -341,7 +372,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.category}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.category}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -406,7 +442,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.father_name}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.father_name}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -428,7 +469,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.father_qualification}
                   </p>
                   {/* <hr /> */}
@@ -450,7 +494,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.father_occupation}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.father_occupation}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -470,7 +519,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.father_profession}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.father_profession}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -490,7 +544,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.father_employer}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.father_employer}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -510,7 +569,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.father_business_details}
                   </p>
                   {/* <hr /> */}
@@ -532,7 +594,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.father_email}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.father_email}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -552,7 +619,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.father_mobile}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.father_mobile}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -572,7 +644,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.father_annual_income}
                   </p>
                   {/* <hr /> */}
@@ -594,7 +669,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.father_residential_address}
                   </p>
                   {/* <hr /> */}
@@ -616,7 +694,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.father_office_address}
                   </p>
                   {/* <hr /> */}
@@ -643,7 +724,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.mother_name}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.mother_name}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -665,7 +751,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.mother_qualification}
                   </p>
                   {/* <hr /> */}
@@ -687,7 +776,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.mother_occupation}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.mother_occupation}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -707,7 +801,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.mother_profession}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.mother_profession}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -727,7 +826,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.mother_employer}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.mother_employer}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -747,7 +851,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.mother_business_details}
                   </p>
                   {/* <hr /> */}
@@ -769,7 +876,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.mother_email}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.mother_email}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -831,7 +943,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.mother_residential_address}
                   </p>
                   {/* <hr /> */}
@@ -853,7 +968,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.mother_office_address}
                   </p>
                   {/* <hr /> */}
@@ -884,7 +1002,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.child_one_name}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.child_one_name}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -904,7 +1027,10 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {details.child_one_addmission_no}
                   </p>
                   {/* <hr /> */}
@@ -926,7 +1052,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.child_one_class}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.child_one_class}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -946,7 +1077,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.child_one_section}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.child_one_section}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -967,7 +1103,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.child_two_name}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.child_two_name}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -1009,7 +1150,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.child_two_section}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.child_two_section}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>
@@ -1029,7 +1175,12 @@ const ViewStudentData = () => {
                   }}
                 >
                   {" "}
-                  <p className="text-start mb-0">{details.child_two_section}</p>
+                  <p
+                    className="text-start mb-0"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    {details.child_two_section}
+                  </p>
                   {/* <hr /> */}
                 </div>
               </div>

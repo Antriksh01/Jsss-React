@@ -6,6 +6,7 @@ import { Readable } from "stream";
 import bcrypt from "bcrypt";
 import fs from "fs";
 import path from "path";
+import ExcelJS from "exceljs";
 
 const PORT = process.env.PORT;
 
@@ -403,7 +404,7 @@ export const downloadImages = async (req, res) => {
 export const getLastReceipt = (req, res) => {
   try {
     db.query(
-      "SELECT * FROM registration_payment ORDER BY recID DESC LIMIT 1",
+      `SELECT registration_payment.*, register.* FROM registration_payment INNER JOIN register ON registration_payment.student_name = CONCAT(register.firstname, ' ', register.lastname) WHERE registration_payment.recID = (SELECT MAX(recID) FROM registration_payment)`,
       (error, results) => {
         if (error) {
           console.error(error);
@@ -764,7 +765,8 @@ export const getAllStudent = (req, res) => {
   try {
     const getquery = `SELECT registration_payment.*, register.*
     FROM registration_payment
-    INNER JOIN register ON registration_payment.recID = register.id`;
+    INNER JOIN register ON 
+        registration_payment.student_name = CONCAT(register.firstname, ' ', register.lastname);`;
 
     // Use a promise or async/await to handle the database query
     db.query(getquery, (err, result) => {
@@ -1096,7 +1098,8 @@ export const register = (req, res) => {
       });
     });
   } catch (error) {
-    console.log(error);
+    alert("An error occurred: " + error.message);
+    console.log(error, "something went wrong");
   }
 };
 
@@ -1148,8 +1151,21 @@ export const getStudentBirthCertificateviaId = (req, res) => {
           res.status(404).json({ error: "Student not found" });
         } else {
           const birthCertificateUrl = result[0].birth_certificate;
+          const fileExtension = birthCertificateUrl
+            .split(".")
+            .pop()
+            .toLowerCase();
 
           try {
+            // Define the content type based on the file extension
+            let contentType = "application/pdf"; // Default to PDF
+
+            if (fileExtension === "jpg" || fileExtension === "jpeg") {
+              contentType = "image/jpeg";
+            } else if (fileExtension === "png") {
+              contentType = "image/png";
+            }
+
             // Download the birth certificate file using Axios
             const response = await axios.get(birthCertificateUrl, {
               responseType: "stream",
@@ -1158,9 +1174,9 @@ export const getStudentBirthCertificateviaId = (req, res) => {
             // Set the appropriate headers for downloading the file
             res.setHeader(
               "Content-Disposition",
-              "attachment; filename=student_birth_certificate.pdf"
+              `attachment; filename=student_birth_certificate.${fileExtension}`
             );
-            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader("Content-Type", contentType);
 
             // Pipe the response data stream to the response object
             response.data.pipe(res);
@@ -1176,5 +1192,395 @@ export const getStudentBirthCertificateviaId = (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const addBlockedStudent = (req, res) => {
+  try {
+    const student_name = req.body.student_name;
+    const father_name = req.body.father_name;
+    const mother_name = req.body.mother_name;
+    const mobile = req.body.mobile;
+
+    const insertQuery =
+      "INSERT INTO blockedstudent (Student_Name, Father_Name, Mother_Name	, Mobile) VALUES (?, ?, ?, ?)";
+
+    db.query(
+      insertQuery,
+      [student_name, father_name, mother_name, mobile],
+      (err, results) => {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log("Student added successfully:", results.insertId);
+        }
+      }
+    );
+    res.json({ message: "Student added successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "student not added to block list" });
+  }
+};
+
+export const blockedStudentList = (req, res) => {
+  try {
+    const getquery = "SELECT * FROM blockedstudent";
+    db.query(getquery, (err, result) => {
+      if (err) {
+        console.log("Error in fetching data:", err);
+        res.status(500).json({ error: "Error in fetching data" });
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteStudentFromBlock = (req, res) => {
+  const id = req.params.id;
+  try {
+    const deleteQuery = "DELETE FROM blockedstudent WHERE id = ?";
+    db.query(deleteQuery, [id], (err, results) => {
+      if (err) {
+        console.error("Error executing DELETE query:", err);
+        return res.status(500).json({ error: "Database query error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: "student not found" });
+      }
+
+      return res.status(200).json({ message: "student deleted successfully" });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllRegStudent = (req, res) => {
+  try {
+    // const getquery = `SELECT registration_payment.*, register.*
+    // FROM registration_payment
+    // INNER JOIN register ON registration_payment.recID = register.id`;
+    const getquery = `SELECT * FROM register`;
+
+    // Use a promise or async/await to handle the database query
+    db.query(getquery, (err, result) => {
+      if (err) {
+        console.log("Error in fetching data:", err);
+        res.status(500).json({ error: "Error in fetching data" });
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const downloadgetAllRegStudent = (req, res) => {
+  try {
+    const getquery = `SELECT registration_payment.*, register.*
+    FROM registration_payment
+    INNER JOIN register ON registration_payment.recID = register.id`;
+    // const getquery = `SELECT * FROM register`;
+
+    // Use a promise or async/await to handle the database query
+    db.query(getquery, (err, result) => {
+      if (err) {
+        console.log("Error in fetching data:", err);
+        res.status(500).json({ error: "Error in fetching data" });
+      } else {
+        // Create a new Excel workbook and worksheet
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Students");
+
+        // Define the columns for your Excel sheet
+        worksheet.columns = [
+          { header: "ID", key: "id", width: 10 },
+          { header: "Religion", key: "Religion", width: 15 },
+          { header: "Adhar Number", key: "adhar_number", width: 15 },
+          { header: "Amount", key: "amount", width: 15 },
+          { header: "Birth Certificate", key: "birth_certificate", width: 20 },
+          { header: "Caste", key: "caste", width: 15 },
+          { header: "Category", key: "category", width: 15 },
+          {
+            header: "Child One Admission No",
+            key: "child_one_addmission_no",
+            width: 20,
+          },
+          { header: "Child One Class", key: "child_one_class", width: 15 },
+          { header: "Child One Name", key: "child_one_name", width: 15 },
+          { header: "Child One Section", key: "child_one_section", width: 15 },
+          {
+            header: "Child Two Admission No",
+            key: "child_two_addmission_no",
+            width: 20,
+          },
+          { header: "Child Two Class", key: "child_two_class", width: 15 },
+          { header: "Child Two Name", key: "child_two_name", width: 15 },
+          { header: "Child Two Section", key: "child_two_section", width: 15 },
+          {
+            header: "Class for Admission",
+            key: "class_for_admission",
+            width: 20,
+          },
+          { header: "Currency", key: "currency", width: 10 },
+          { header: "Date of Birth", key: "date_of_birth", width: 15 },
+          {
+            header: "Father Annual Income",
+            key: "father_annual_income",
+            width: 20,
+          },
+          {
+            header: "Father Business Details",
+            key: "father_business_details",
+            width: 20,
+          },
+          { header: "Father Email", key: "father_email", width: 20 },
+          { header: "Father Employer", key: "father_employer", width: 20 },
+          { header: "Father Mobile", key: "father_mobile", width: 15 },
+          { header: "Father Name", key: "father_name", width: 15 },
+          { header: "Father Occupation", key: "father_occupation", width: 20 },
+          {
+            header: "Father Office Address",
+            key: "father_office_address",
+            width: 20,
+          },
+          { header: "Father Profession", key: "father_profession", width: 20 },
+          {
+            header: "Father Qualification",
+            key: "father_qualification",
+            width: 20,
+          },
+          {
+            header: "Father Residential Address",
+            key: "father_residential_address",
+            width: 20,
+          },
+          { header: "Firstname", key: "firstname", width: 15 },
+          { header: "Gender", key: "gender", width: 10 },
+          { header: "Lastname", key: "lastname", width: 15 },
+          { header: "Mobile", key: "mobile", width: 15 },
+          {
+            header: "Mother Annual Income",
+            key: "mother_annual_income",
+            width: 20,
+          },
+          {
+            header: "Mother Business Details",
+            key: "mother_business_details",
+            width: 20,
+          },
+          { header: "Mother Email", key: "mother_email", width: 20 },
+          { header: "Mother Employer", key: "mother_employer", width: 20 },
+          { header: "Mother Mobile", key: "mother_mobile", width: 15 },
+          { header: "Mother Name", key: "mother_name", width: 15 },
+          { header: "Mother Occupation", key: "mother_occupation", width: 20 },
+          { header: "Mother Profession", key: "mother_profession", width: 20 },
+          {
+            header: "Mother Qualification",
+            key: "mother_qualification",
+            width: 20,
+          },
+          {
+            header: "Mother Residential Address",
+            key: "mother_residential_address",
+            width: 20,
+          },
+          { header: "Office Address", key: "office_address", width: 20 },
+          { header: "Pay ID", key: "pay_id", width: 20 },
+          { header: "Present Class", key: "present_class", width: 15 },
+          { header: "Present School", key: "present_school", width: 15 },
+          {
+            header: "Present School City",
+            key: "present_school_city",
+            width: 20,
+          },
+          { header: "RecID", key: "recID", width: 10 },
+          { header: "Receipt", key: "receipt", width: 20 },
+          { header: "Status", key: "status", width: 15 },
+          { header: "Student Name", key: "student_name", width: 20 },
+          { header: "Time", key: "time", width: 20 },
+        ];
+
+        // Add data to the worksheet
+        result.forEach((row) => {
+          worksheet.addRow(row);
+        });
+
+        // Set the response headers to trigger a download
+        res.setHeader(
+          "Content-Type",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        res.setHeader(
+          "Content-Disposition",
+          "attachment; filename=students.xlsx"
+        );
+
+        // Stream the Excel workbook to the response
+        workbook.xlsx.write(res).then(() => {
+          res.end();
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const downloadgetOnlyRegStudent = (req, res) => {
+  try {
+    // const getquery = `SELECT registration_payment.*, register.*
+    // FROM registration_payment
+    // INNER JOIN register ON registration_payment.recID = register.id`;
+    const getquery = `SELECT * FROM register`;
+
+    // Use a promise or async/await to handle the database query
+    db.query(getquery, (err, result) => {
+      if (err) {
+        console.log("Error in fetching data:", err);
+        res.status(500).json({ error: "Error in fetching data" });
+      } else {
+        // Create a new Excel workbook and worksheet
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Registered Students");
+
+        // Define the columns for your Excel sheet
+        worksheet.columns = [
+          { header: "ID", key: "id", width: 10 },
+          { header: "Religion", key: "Religion", width: 15 },
+          { header: "Adhar Number", key: "adhar_number", width: 15 },
+          // { header: "Amount", key: "amount", width: 15 },
+          { header: "Birth Certificate", key: "birth_certificate", width: 20 },
+          { header: "Caste", key: "caste", width: 15 },
+          { header: "Category", key: "category", width: 15 },
+          {
+            header: "Child One Admission No",
+            key: "child_one_addmission_no",
+            width: 20,
+          },
+          { header: "Child One Class", key: "child_one_class", width: 15 },
+          { header: "Child One Name", key: "child_one_name", width: 15 },
+          { header: "Child One Section", key: "child_one_section", width: 15 },
+          {
+            header: "Child Two Admission No",
+            key: "child_two_addmission_no",
+            width: 20,
+          },
+          { header: "Child Two Class", key: "child_two_class", width: 15 },
+          { header: "Child Two Name", key: "child_two_name", width: 15 },
+          { header: "Child Two Section", key: "child_two_section", width: 15 },
+          {
+            header: "Class for Admission",
+            key: "class_for_admission",
+            width: 20,
+          },
+          // { header: "Currency", key: "currency", width: 10 },
+          { header: "Date of Birth", key: "date_of_birth", width: 15 },
+          {
+            header: "Father Annual Income",
+            key: "father_annual_income",
+            width: 20,
+          },
+          {
+            header: "Father Business Details",
+            key: "father_business_details",
+            width: 20,
+          },
+          { header: "Father Email", key: "father_email", width: 20 },
+          { header: "Father Employer", key: "father_employer", width: 20 },
+          { header: "Father Mobile", key: "father_mobile", width: 15 },
+          { header: "Father Name", key: "father_name", width: 15 },
+          { header: "Father Occupation", key: "father_occupation", width: 20 },
+          {
+            header: "Father Office Address",
+            key: "father_office_address",
+            width: 20,
+          },
+          { header: "Father Profession", key: "father_profession", width: 20 },
+          {
+            header: "Father Qualification",
+            key: "father_qualification",
+            width: 20,
+          },
+          {
+            header: "Father Residential Address",
+            key: "father_residential_address",
+            width: 20,
+          },
+          { header: "Firstname", key: "firstname", width: 15 },
+          { header: "Gender", key: "gender", width: 10 },
+          { header: "Lastname", key: "lastname", width: 15 },
+          { header: "Mobile", key: "mobile", width: 15 },
+          {
+            header: "Mother Annual Income",
+            key: "mother_annual_income",
+            width: 20,
+          },
+          {
+            header: "Mother Business Details",
+            key: "mother_business_details",
+            width: 20,
+          },
+          { header: "Mother Email", key: "mother_email", width: 20 },
+          { header: "Mother Employer", key: "mother_employer", width: 20 },
+          { header: "Mother Mobile", key: "mother_mobile", width: 15 },
+          { header: "Mother Name", key: "mother_name", width: 15 },
+          { header: "Mother Occupation", key: "mother_occupation", width: 20 },
+          { header: "Mother Profession", key: "mother_profession", width: 20 },
+          {
+            header: "Mother Qualification",
+            key: "mother_qualification",
+            width: 20,
+          },
+          {
+            header: "Mother Residential Address",
+            key: "mother_residential_address",
+            width: 20,
+          },
+          { header: "Office Address", key: "office_address", width: 20 },
+          // { header: "Pay ID", key: "pay_id", width: 20 },
+          { header: "Present Class", key: "present_class", width: 15 },
+          { header: "Present School", key: "present_school", width: 15 },
+          {
+            header: "Present School City",
+            key: "present_school_city",
+            width: 20,
+          },
+          // { header: "RecID", key: "recID", width: 10 },
+          // { header: "Receipt", key: "receipt", width: 20 },
+          // { header: "Status", key: "status", width: 15 },
+          // { header: "Student Name", key: "student_name", width: 20 },
+          { header: "Time", key: "time", width: 20 },
+        ];
+
+        // Add data to the worksheet
+        result.forEach((row) => {
+          worksheet.addRow(row);
+        });
+
+        // Set the response headers to trigger a download
+        res.setHeader(
+          "Content-Type",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        res.setHeader(
+          "Content-Disposition",
+          "attachment; filename=students.xlsx"
+        );
+
+        // Stream the Excel workbook to the response
+        workbook.xlsx.write(res).then(() => {
+          res.end();
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

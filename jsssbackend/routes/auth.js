@@ -2,23 +2,29 @@ import express from "express";
 import multer from "multer";
 import {
   NoticeDelete,
+  addBlockedStudent,
   addImage,
   addTOCart,
   adminLogin,
   adminRegister,
+  blockedStudentList,
   createNotice,
   createOrder,
   deleteCart,
   deleteEvent,
   deleteImages,
   deleteSingleCartItem,
+  deleteStudentFromBlock,
   downloadImages,
+  downloadgetAllRegStudent,
+  downloadgetOnlyRegStudent,
   eventlist,
   galleryLogin,
   getAllImages,
   getAllImagesViaEventId,
   getAllListItems,
   getAllNotices,
+  getAllRegStudent,
   getAllStudent,
   getCartItems,
   getLastReceipt,
@@ -102,5 +108,11 @@ router.get(
   "/getStudentBirthCertificateviaId/:id",
   getStudentBirthCertificateviaId
 );
+router.post("/addBlockedStudent", addBlockedStudent);
+router.get("/blockedStudentList", blockedStudentList);
+router.delete("/deleteStudentFromBlock/:id", deleteStudentFromBlock);
+router.get("/getAllRegStudent", getAllRegStudent);
+router.get("/downloadgetAllRegStudent", downloadgetAllRegStudent);
+router.get("/downloadgetOnlyRegStudent", downloadgetOnlyRegStudent);
 
 export { router as authRoutes };

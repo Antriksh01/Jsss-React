@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Layout from "../Layout/Layout";
 import { useNavigate } from "react-router-dom";
@@ -28,12 +28,13 @@ const Eregister = () => {
   const [dob, setDob] = useState({
     date_of_birth: null,
     dob_in_words: "",
-    Age: "", // Remove Age from the initial state since it will be calculated
-    // ... other fields
+    Age: "",
   });
 
   const [Razorpay, isLoaded] = useRazorpay();
   const [birth_certificate, setBirthCertificate] = useState(null);
+  const [studentList, setStudentList] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [data, setData] = useState({
     class_for_admission: "",
     present_school: "",
@@ -89,23 +90,6 @@ const Eregister = () => {
     setIsChecked(!isChecked);
   };
 
-  // const isAgeValid = (selectedDate, selectedClass) => {
-  //     const dateOfBirth = new Date(selectedDate);
-  //     const currentDate = new Date();
-  //     const ageInMonths =
-  //         (currentDate.getFullYear() - dateOfBirth.getFullYear()) * 12 +
-  //         (currentDate.getMonth() - dateOfBirth.getMonth());
-
-  //     const ageRanges = {
-  //         Nursery: { min: 2 * 12 + 9, max: 3 * 12 + 8 },
-  //         KG_Lower: { min: 3 * 12 + 9, max: 4 * 12 + 8 },
-  //         KG_Upper: { min: 4 * 12 + 9, max: 5 * 12 + 8 },
-  //     };
-
-  //     const validAgeRange = ageRanges[selectedClass];
-  //     return (
-  //         validAgeRange &&
-  //         ageInMonths >= validAgeRange.min &&
   const handleBirthCertificateChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -113,15 +97,27 @@ const Eregister = () => {
       setBirthCertificate(selectedFile);
     }
   };
+
   console.log(birth_certificate);
+
+  const getStudentList = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:4000/api/auth/blockedStudentList"
+      );
+      console.log(res.data);
+      setStudentList(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getStudentList();
+  }, []);
 
   const handleSubmit = async (e, paymentStatus) => {
     e.preventDefault();
-
-    // const user = {
-    //   data,
-    //   birth_certificate,
-    // };
 
     const formData = new FormData();
 
@@ -204,9 +200,22 @@ const Eregister = () => {
         });
         // setBirthCertificateFile("");
       } catch (error) {
-        // console.error(error.response.status); // Log the HTTP status code
-        // console.error(error.response.data);
-        cogoToast.error(error);
+        if (error.response) {
+          // The request was made, but the server responded with a non-2xx status code
+          const data = error.response.data;
+          console.error(data.error);
+          // Handle the error in your frontend UI or take appropriate action
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error(
+            "Network error. The request was made but no response was received."
+          );
+          // Handle the error in your frontend UI or take appropriate action
+        } else {
+          // Something else went wrong
+          console.error("An error occurred:", error.message);
+          // Handle the error in your frontend UI or take appropriate action
+        }
       }
     }
   };
@@ -306,56 +315,98 @@ const Eregister = () => {
   const calculateAge = (date) => {
     if (date) {
       const birthDate = new Date(date);
-      const currentDate = new Date();
+      const currentDate = new Date("2024-04-01");
+      // console.log(currentDate);
       const ageInMilliseconds = currentDate - birthDate;
-      const ageInYears = ageInMilliseconds / (365 * 24 * 60 * 60 * 1000);
-      const age = Math.floor(ageInYears);
-      return age.toString(); // Convert age to a string
+
+      const millisecondsInYear = 365 * 24 * 60 * 60 * 1000;
+      const millisecondsInMonth = millisecondsInYear / 12;
+      const millisecondsInDay = 24 * 60 * 60 * 1000;
+
+      const years = Math.floor(ageInMilliseconds / millisecondsInYear);
+      const remainingMilliseconds = ageInMilliseconds % millisecondsInYear;
+      const months = Math.floor(remainingMilliseconds / millisecondsInMonth);
+      const days = Math.floor(
+        (remainingMilliseconds % millisecondsInMonth) / millisecondsInDay
+      );
+
+      const ageString = `${years} years, ${months} months, ${days} days`;
+      console.log(ageString);
+      return ageString;
     }
-    return ""; // Return an empty string if no date is selected
+    return "";
   };
   const calculateDateInWords = (date) => {
-    if (!date) return ""; // Return an empty string if no date is selected
+    if (!date) return "";
 
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
 
   const handleDateChange = (date) => {
-    // Calculate and set the Age field in the dob state
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    console.log(`${year}-${month}-${day}`);
+    const DoBDate = `${year}-${month}-${day}`;
     const age = calculateAge(date);
+    console.log(date);
 
     // Calculate and set the dob_in_words field in the dob state
     const dateInWords = calculateDateInWords(date);
 
-    // Update the "data" state with the selected date of birth
     setData({
       ...data,
-      date_of_birth: date, // Update with the selected date
+      date_of_birth: DoBDate,
       dob_in_words: dateInWords,
       Age: age,
-      // ... other fields
     });
     setDob({
-      date_of_birth: date, // Update with the selected date
+      date_of_birth: date,
       dob_in_words: dateInWords,
       Age: age,
-      // ... other fields
     });
   };
 
   console.log(data);
+  console.log(studentList.Student_Name);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     const studentName = data.firstname + " " + data.lastname;
+    const isMatch = studentList.some((student) => {
+      const studentFullName = studentName === student.Student_Name;
+      const fatherNameMatch = data.father_name === student.Father_Name;
+      const motherNameMatch = data.mother_name === student.Mother_Name;
+      const mobileMatch = data.mobile === student.Mobile;
+      console.log(student.Student_Name, student.mobile);
 
-    // Initialize Razorpay and pass the paymentStatus to handleSubmit
-    initializeRazorpay(studentName, (paymentStatus) => {
-      handleSubmit(e, paymentStatus);
-      // console.log(paymentStatus);
+      console.log("Father Name Comparison:", fatherNameMatch);
+      console.log("Mother Name Comparison:", motherNameMatch);
+      console.log("Mobile Comparison:", mobileMatch);
+      console.log("studentName Comparison", studentFullName);
+
+      return (
+        fatherNameMatch && motherNameMatch && mobileMatch && studentFullName
+      );
     });
+
+    console.log("isMatch:", isMatch);
+
+    console.log("data.father_name:", data.father_name);
+    console.log("data.mother_name:", data.mother_name);
+    console.log("data.mobile:", data.mobile);
+
+    if (isMatch) {
+      cogoToast.error("Oops! Something went wrong...");
+    } else {
+      // Initialize Razorpay and pass the paymentStatus to handleSubmit
+      initializeRazorpay(studentName, (paymentStatus) => {
+        console.log("Razorpay initialized successfully");
+        handleSubmit(e, paymentStatus);
+      });
+    }
   };
 
   return (
@@ -592,14 +643,17 @@ const Eregister = () => {
                     <div className="row px-3 py-2">
                       <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                         <label for="dateInput">Date of Birth:</label>
-                        <div class="input-group">
+                        <div class="input-group spanDiv">
                           <DatePicker
                             selected={dob.date_of_birth}
                             onChange={(date) => handleDateChange(date)} // No need to pass event here
                             className="form-control"
-                            dateFormat="dd/MM/yyyy"
+                            dateFormat="yyyy-MM-dd"
                             placeholderText="Select a date"
                             value={dob.date_of_birth}
+                            showMonthDropdown={true}
+                            showYearDropdown={true}
+                            scrollableYearDropdown={false}
                           />
                           {/* <div class="input-group-append">
                                                <span class="input-group-text">
@@ -627,7 +681,10 @@ const Eregister = () => {
                       <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
                           <label for="Age">
-                            Age<span style={{ color: "red" }}>*</span>
+                            Age
+                            <span style={{ color: "red" }}>
+                              * (Age will be on 1st April 2024)
+                            </span>
                           </label>
                           <input
                             type="text"
@@ -657,8 +714,8 @@ const Eregister = () => {
                             onChange={handleInputChange}
                           >
                             <option>--select gender--</option>
-                            <option value="male">male</option>
-                            <option value="female">female</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
                           </select>
                         </div>
                       </div>
@@ -757,9 +814,9 @@ const Eregister = () => {
                             type="file"
                             class="form-control"
                             name="birth_certificate"
-                            placeholder="only upload PDF file"
+                            // placeholder="only upload PDF file"
                             id="birth_certificate"
-                            accept=".pdf"
+                            accept=".pdf, .jpg, .jpeg, .png"
                           />
                         </div>
                       </div>
@@ -1620,4 +1677,37 @@ const Container = styled.div`
   //   h3 {
   //     font-size: 1rem;
   //   }
+
+  .spanDiv {
+    padding: 10px 0px;
+    color: #bbb;
+  }
+
+  .react-datepicker__navigation--years-upcoming::before {
+    border-color: #ccc;
+    border-style: solid;
+    border-width: 3px 3px 0 0;
+    content: "";
+    display: block;
+    height: 11px;
+    position: absolute;
+    top: 18px;
+    width: 11px;
+    margin-left: 9px;
+    rotate: 317deg;
+  }
+
+  .react-datepicker__navigation--years-previous::before {
+    border-color: #ccc;
+    border-style: solid;
+    border-width: 3px 3px 0 0;
+    content: "";
+    display: block;
+    height: 11px;
+    position: absolute;
+    top: 9px !important;
+    width: 11px;
+    margin-left: 9px;
+    rotate: 137deg !important;
+  }
 `;

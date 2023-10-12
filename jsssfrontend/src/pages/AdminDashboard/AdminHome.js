@@ -7,6 +7,8 @@ import { useAuth } from "../../context/Index";
 import GalleryMainPart from "../../component/adminDashboard/GalleryPart/GalleryMainPart";
 import NoticeBoardUpdate from "../../component/adminDashboard/NoticeBoardUpdate";
 import StudentDetails from "../../component/adminDashboard/StudentDetails";
+import BlockedStudent from "../../component/adminDashboard/BlockedStudent";
+import RegStudentDetails from "../../component/adminDashboard/RegStudentDetails";
 
 const AdminHome = () => {
   const initialTab = localStorage.getItem("selectedTab") || "tab1";
@@ -51,24 +53,53 @@ const AdminHome = () => {
                 </div>
 
                 <Nav.Item>
-                  <Nav.Link eventKey="tab1" className="navlink text-center">
-                    Student Reg. Details
+                  <Nav.Link
+                    eventKey="tab1"
+                    className="navlink text-center shadow"
+                  >
+                    All Reg. Student Details
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="tab2" className="navlink text-center">
+                  <Nav.Link
+                    eventKey="tab2"
+                    className="navlink text-center shadow"
+                  >
                     Notice Board
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="tab3" className="navlink text-center">
+                  <Nav.Link
+                    eventKey="tab3"
+                    className="navlink text-center shadow"
+                  >
                     Gallery
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link
+                    eventKey="tab4"
+                    className="navlink text-center shadow"
+                  >
+                    Blocked List
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link
+                    eventKey="tab5"
+                    className="navlink text-center shadow"
+                  >
+                    Registered Student
                   </Nav.Link>
                 </Nav.Item>
                 <Link
                   to="https://test.doaguru.com/jss/Jsss/studentreportsandcards.php"
-                  className="btn btn-warning mb-4"
-                  style={{ color: "white" }}
+                  className="btn btn-warning mb-4 shadow"
+                  style={{
+                    color: "white",
+                    backgroundColor: "#3d3f99",
+                    border: "none",
+                  }}
                 >
                   Uploads
                 </Link>
@@ -83,6 +114,8 @@ const AdminHome = () => {
                 {selectedTab === "tab1" && <StudentDetails />}
                 {selectedTab === "tab2" && <NoticeBoardUpdate />}
                 {selectedTab === "tab3" && <GalleryMainPart />}
+                {selectedTab === "tab4" && <BlockedStudent />}
+                {selectedTab === "tab5" && <RegStudentDetails />}
               </div>
             </div>
           </>

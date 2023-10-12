@@ -169,7 +169,7 @@ const NoticeBoardUpdate = () => {
       e.preventDefault();
       try {
         const res = await axios.put(
-          `http://localhost:4400/api/auth/updateNotice/${selectedItem.id}`,
+          `http://localhost:4000/api/auth/updateNotice/${selectedItem.id}`,
           {
             noticeText: noticeText,
             linkURL: linkURL,

@@ -13,6 +13,7 @@ const ViewReceipt = () => {
 
   const getLastData = async () => {
     try {
+      console.log(id);
       const res = await axios.get(
         `http://localhost:4000/api/auth/getReceiptViaID/${id}`
       );
@@ -143,7 +144,10 @@ const ViewReceipt = () => {
                         <h4 className="text-start">Candidate's Name</h4>
                       </div>
                       <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                        <p className="mt-2 text-start">
+                        <p
+                          className="mt-2 text-start"
+                          style={{ textTransform: "uppercase" }}
+                        >
                           : {details.firstname + " " + details.lastname}
                         </p>
                       </div>
@@ -177,7 +181,10 @@ const ViewReceipt = () => {
                         <h4 className="text-start">Father's Name</h4>
                       </div>
                       <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                        <p className="mt-2 text-start">
+                        <p
+                          className="mt-2 text-start"
+                          style={{ textTransform: "uppercase" }}
+                        >
                           : Mr. {details.father_name}
                         </p>
                       </div>

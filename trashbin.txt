@@ -1,3 +1,223 @@
+alert("data");
+ 
+ Blocked List
+ 
+data.firstname + " " + data.lastname
+ 
+console.log();
+ 
+console.log(studentList[0].Student_Name);
+ 
+
+    console.log(
+      "data.firstname + data.lastname:",
+      data.firstname + data.lastname
+    );
+ 
+downloadBirthCertificate
+ 
+ <button
+                          class="btn btn-warning"
+                          onClick={() => handleReceipt(item.id)}
+                        >
+                          View Reciept
+                        </button>
+ 
+<button
+                          class="btn btn-info"
+                          onClick={() => handleMoreDetails(item.id)}
+                        >
+                          View Details
+                        </button>
+ 
+  <td>{item.lastname}</td>
+ 
+<td>{item.present_class}</td>
+                    <td>{item.date_of_birth}</td>
+                    <td>{item.present_school}</td>
+                    <td>{item.receipt}</td>
+                    <td>{item.present_school_city}</td>
+                    <td>{item.father_name}</td>
+                    <td>{item.father_mobile}</td>
+                    <td>{item.mother_name}</td>
+                    <td>{item.mother_mobile}</td>
+                    <td>{item.Religion}</td>
+ 
+// Use a promise or async/await to handle the database query
+ 
+console.log("clickced");
+ 
+<select
+                  className="mb-3 rounded p-1"
+                  
+                >
+                  <option value="">Select an Image Event</option>
+                  {eventsList.map((event) => (
+                    <option value={event.event_name}>{event.event_name}</option>
+                  ))}
+                </select>
+ 
+<select
+                  className="mb-3 rounded p-1"
+                  name="Mobile"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                >
+                  <option value="">Select an Image Event</option>
+                  {eventsList.map((event) => (
+                    <option value={event.event_name}>{event.event_name}</option>
+                  ))}
+                </select>
+ 
+Event (ex:independance_day)
+ 
+ maxLength={4}
+ 
+Year (ex: 2023)
+ 
+<input
+                  type="file"
+                  placeholder="choose image"
+                  className="mb-3"
+                  onChange={handleImageChange}
+                  multiple
+                />
+ 
+ const insert
+ 
+tudent
+ 
+ {/* <input
+                  type="text"
+                  placeholder="Image event"
+                  className="mb-3 rounded p-1"
+                  name="imgEvent"
+                  value={imgEvent}
+                  onChange={(e) => setImgEvent(e.target.value)}
+                /> */}
+ 
+<th className="header-cell">Date of Birth</th>
+                  <th className="header-cell">Previous School</th>
+                  <th className="header-cell">Receipt No.</th>
+                  <th className="header-cell">City</th>
+                  <th className="header-cell">Father Name</th>
+                  <th className="header-cell">Father Mobile No</th>
+                  <th className="header-cell">Mother Name</th>
+                  <th className="header-cell">Mother Mobile No</th>
+                  <th className="header-cell">Religion</th>
+ 
+<th className="header-cell">
+                    <p>Class for Registration</p>
+                    <select
+                      id="class-filter"
+                      //   value={classFilter}
+                      //   onChange={handleClassFilterChange}
+                    >
+                      <option value="">All</option>
+                      <option value="1st">1st</option>
+                      <option value="2nd">2nd</option>
+                      <option value="3rd">3rd</option>
+                      <option value="4th">4th</option>
+                      <option value="5th">5th</option>
+                      <option value="6th">6th</option>
+                      <option value="7th">7th</option>
+                      <option value="8th">8th</option>
+                      <option value="9th">9th</option>
+                      <option value="11th">11th</option>
+                    </select>
+                  </th>
+ 
+ // style={{ backgroundColor: "#ff3f34" }}
+ 
+{/* <button
+                        className="btn btn-danger"
+                        style={{ backgroundColor: "#ff3f34" }}
+                        onClick={() => handleMoreDetails(item.id)}
+                      >
+                        More Details
+                      </button> */}
+ 
+<div>BlockedStudent</div>;
+ 
+/ Number of years to display in the year dropdown
+ 
+age
+ 
+// Convert age to a string
+    }
+ 
+// Return an empty string if no date is selected
+ 
+// Return an empty string if no date is selected
+ 
+
+    // const user = {
+    //   data,
+    //   birth_certificate,
+    // };
+ 
+  // const isAgeValid = (selectedDate, selectedClass) => {
+  //     const dateOfBirth = new Date(selectedDate);
+  //     const currentDate = new Date();
+  //     const ageInMonths =
+  //         (currentDate.getFullYear() - dateOfBirth.getFullYear()) * 12 +
+  //         (currentDate.getMonth() - dateOfBirth.getMonth());
+
+  //     const ageRanges = {
+  //         Nursery: { min: 2 * 12 + 9, max: 3 * 12 + 8 },
+  //         KG_Lower: { min: 3 * 12 + 9, max: 4 * 12 + 8 },
+  //         KG_Upper: { min: 4 * 12 + 9, max: 5 * 12 + 8 },
+  //     };
+
+  //     const validAgeRange = ageRanges[selectedClass];
+  //     return (
+  //         validAgeRange &&
+  //         ageInMonths >= validAgeRange.min &&
+ 
+// Remove Age from the initial state since it will be calculated
+    // ... other fields
+ 
+// Calculate and set the Age field in the dob state
+ 
+// ... other fields
+ 
+ // ... other fields
+ 
+// Update the "data" state with the selected date of birth
+ 
+// Update with the selected date
+ 
+ // const user = {
+    //   data,
+    //   birth_certificate,
+    // };
+ 
+// const isAgeValid = (selectedDate, selectedClass) => {
+  //     const dateOfBirth = new Date(selectedDate);
+  //     const currentDate = new Date();
+  //     const ageInMonths =
+  //         (currentDate.getFullYear() - dateOfBirth.getFullYear()) * 12 +
+  //         (currentDate.getMonth() - dateOfBirth.getMonth());
+
+  //     const ageRanges = {
+  //         Nursery: { min: 2 * 12 + 9, max: 3 * 12 + 8 },
+  //         KG_Lower: { min: 3 * 12 + 9, max: 4 * 12 + 8 },
+  //         KG_Upper: { min: 4 * 12 + 9, max: 5 * 12 + 8 },
+  //     };
+
+  //     const validAgeRange = ageRanges[selectedClass];
+  //     return (
+  //         validAgeRange &&
+  //         ageInMonths >= validAgeRange.min &&
+ 
+// Update with the selected date
+ 
+ // ... other fields
+ 
+ // ... other fields
+ 
+// Update with the selected date
+ 
 width: "60%",
  
 paddingRight: "1rem",

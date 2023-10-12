@@ -57,6 +57,7 @@ const StudentDetails = () => {
   };
 
   const handleReceipt = (id) => {
+    console.log(id);
     navigate(`/view-student-receipt/${id}`);
   };
 
@@ -66,24 +67,47 @@ const StudentDetails = () => {
       const response = await axios.get(
         `http://localhost:4000/api/auth/getStudentBirthCertificateviaId/${id}`,
         {
-          responseType: "blob", // Request binary data
+          responseType: "arraybuffer", // Request binary data as an ArrayBuffer
         }
       );
 
-      // Create a blob from the response data
-      const blob = new Blob([response.data], { type: "application/pdf" });
+      // Get the Content-Type header from the response
+      const contentType = response.headers["content-type"];
 
-      // Create a URL for the blob
-      const url = window.URL.createObjectURL(blob);
+      // Check if the Content-Type indicates it's a PDF, JPG, JPEG, or PNG
+      if (
+        contentType === "application/pdf" ||
+        contentType === "image/jpeg" ||
+        contentType === "image/jpg" ||
+        contentType === "image/png"
+      ) {
+        // Create a new Blob from the response data
+        const file = new File([response.data], "certificate", {
+          type: contentType,
+        });
 
-      // Open the URL in a new tab
-      window.open(url, "_blank");
+        // Create a data URL for the file
+        const url = URL.createObjectURL(file);
 
-      // Release the URL when it's no longer needed to free up memory
-      window.URL.revokeObjectURL(url);
+        // Open the URL in a new tab
+        window.open(url, "_blank");
+      } else {
+        console.log("Unsupported file type");
+      }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const downloadgetAllRegStudent = async () => {
+    // const res = await axios.get(
+    //   "http://localhost:4400/api/auth/downloadgetAllRegStudent"
+    // );
+    // console.log(res.data);
+    // const docData = res.data;
+
+    window.location.href =
+      "http://localhost:4400/api/auth/downloadgetAllRegStudent";
   };
 
   return (
@@ -92,6 +116,12 @@ const StudentDetails = () => {
         <h1 className="text-center">Students Details</h1>
         <div className="container mt-5 mb-5">
           <div className="table-container">
+            <button
+              className="btn btn-success mb-1"
+              onClick={downloadgetAllRegStudent}
+            >
+              Download List
+            </button>
             <table>
               <thead>
                 <tr>
@@ -129,6 +159,7 @@ const StudentDetails = () => {
                   <th className="header-cell">Mother Name</th>
                   <th className="header-cell">Mother Mobile No</th>
                   <th className="header-cell">Religion</th>
+                  <th className="header-cell">Payment Status</th>
                   <th className="header-cell">More Details</th>
                 </tr>
               </thead>
@@ -149,6 +180,7 @@ const StudentDetails = () => {
                     <td>{item.mother_name}</td>
                     <td>{item.mother_mobile}</td>
                     <td>{item.Religion}</td>
+                    <td>{item.status}</td>
                     <td>
                       {/* <button
                         className="btn btn-danger"
